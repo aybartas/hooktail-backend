@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace Hooktail.Entities.Concrete
 {
-    public class Customer:ITable
+    public class User:ITable
     {
         public int Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<PaymentInfo> PaymentInfos { get; set; }
+
+
     }
 }

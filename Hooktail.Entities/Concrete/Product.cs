@@ -13,12 +13,14 @@ namespace Hooktail.Entities.Concrete
         public string Name { get; set; }
         public float Price { get; set; }
         public string Description { get; set; }
-        public SubCategory SubCategory { get; set; }
-#nullable enable
-        public Stock? Stock { get; set; }
-        public Campaign? Campaign { get; set; }
-        public List<OrderItem>? OrderItems { get; set; }
-        
-#nullable disable
+        public int StockId { get; set; }
+        public int SubCategoryId { get; set; }
+
+        public virtual SubCategory SubCategory { get; set; }
+        public virtual Stock Stock { get; set; }
+        public virtual ICollection<ProductCampaign> ProductCampaigns { get; set; }
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+
     }
 }
