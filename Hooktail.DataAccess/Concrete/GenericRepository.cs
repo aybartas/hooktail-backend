@@ -1,39 +1,47 @@
-﻿using Hooktail.DataAccess.Interfaces;
-using Hooktail.Entities.Interfaces;
+﻿using Hooktail.DataAccess.Context;
+using Hooktail.DataAccess.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hooktail.DataAccess.Concrete
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : ITable, new()
+    public class GenericRepository<T> : IGenericRepository<T> where T: class
     {
-        public Task AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
-            throw new NotImplementedException();
+            using var context = new HooktailContext();
+            await context.AddAsync(entity);
+            await context.SaveChangesAsync();
         }
 
-        public Task DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            throw new NotImplementedException();
+            using var context = new HooktailContext();
+            context.Remove<T>(entity);
+            await context.SaveChangesAsync(); 
         }
 
-        public Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            using var context = new HooktailContext();
+            return await context.Set<T>().ToListAsync();
         }
 
-        public Task<T> GetAsync(Expression<Func<T, bool>> filter)
+        public async Task<List<T>> GetAsync(Expression<Func<T, bool>> filter)
         {
-            throw new NotImplementedException();
+            using var context = new HooktailContext();
+            return await context.Set<T>().Where(filter).ToListAsync();
         }
 
-        public Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity)
         {
-            throw new NotImplementedException();
+            using var context = new HooktailContext();
+            context.Update<T>(entity);
+            await context.SaveChangesAsync();
         }
     }
 }

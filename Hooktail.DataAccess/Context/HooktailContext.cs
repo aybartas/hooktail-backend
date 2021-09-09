@@ -1,19 +1,17 @@
 ﻿using Hooktail.Entities.Concrete;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Hooktail.DataAccess.Context
 {
-    public class HooktailContext:DbContext
+    public class HooktailContext : DbContext
     {
-        public HooktailContext():base("HooktailDb")
+        public HooktailContext() 
         {
-
         }
 
         public DbSet<Campaign> Campaigns { get; set; }
@@ -28,10 +26,12 @@ namespace Hooktail.DataAccess.Context
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<User> Users { get; set; }
 
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            optionsBuilder.UseSqlServer(
+               "server=TAS\\SQLEXPRESS; database=HooktailDb; integrated security=true;");
         }
+
+        
     }
 }
