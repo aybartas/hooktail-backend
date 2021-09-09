@@ -15,7 +15,7 @@ namespace Hooktail.Entities.Concrete
         public string Description { get; set; }
         public int StockId { get; set; }
         public int SubCategoryId { get; set; }
-
+        public string ImagePath { get; set; }
         public virtual SubCategory SubCategory { get; set; }
         public virtual Stock Stock { get; set; }
         public virtual ICollection<ProductCampaign> ProductCampaigns { get; set; }

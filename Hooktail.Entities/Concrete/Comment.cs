@@ -14,9 +14,12 @@ namespace Hooktail.Entities.Concrete
         public int LikeCount { get; set; }
         public int ProductId { get; set; }
         public int UserId { get; set; }
+        public int? ParentCommentId { get; set; }
 
         public virtual Product Product { get; set; }
         public virtual User User { get; set; }
+        public virtual Comment ParentComment { get; set; }
+        public virtual ICollection<Comment> SubComments { get; set; }
 
     }
 }
