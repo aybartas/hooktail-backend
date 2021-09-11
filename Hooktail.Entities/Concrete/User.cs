@@ -20,6 +20,5 @@ namespace Hooktail.Entities.Concrete
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PaymentInfo> PaymentInfos { get; set; }
 
-
     }
 }

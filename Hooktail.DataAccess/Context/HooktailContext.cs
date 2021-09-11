@@ -1,4 +1,5 @@
-﻿using Hooktail.Entities.Concrete;
+﻿using Hooktail.DataAccess.Mapping;
+using Hooktail.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,21 @@ namespace Hooktail.DataAccess.Context
                "server=TAS\\SQLEXPRESS; database=HooktailDb; integrated security=true;");
         }
 
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new CampaignMap());
+            modelBuilder.ApplyConfiguration(new CategoryMap());
+            modelBuilder.ApplyConfiguration(new CommentMap());
+            modelBuilder.ApplyConfiguration(new OrderItemMap());
+            modelBuilder.ApplyConfiguration(new OrderMap());
+            modelBuilder.ApplyConfiguration(new PaymentInfoMap());
+            modelBuilder.ApplyConfiguration(new ProductCampaignMap());
+            modelBuilder.ApplyConfiguration(new ProductMap());
+            modelBuilder.ApplyConfiguration(new StockMap());
+            modelBuilder.ApplyConfiguration(new SubCategoryMap());
+            modelBuilder.ApplyConfiguration(new UserMap());
+
+        }
+
     }
 }
