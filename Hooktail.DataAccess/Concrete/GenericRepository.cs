@@ -25,6 +25,12 @@ namespace Hooktail.DataAccess.Concrete
             await context.SaveChangesAsync(); 
         }
 
+        public async Task<T> FindByIdAsync(int id)
+        {
+            using var context = new HooktailContext();
+            return await context.FindAsync<T>(id);
+        }
+
         public async Task<List<T>> GetAllAsync()
         {
             using var context = new HooktailContext();

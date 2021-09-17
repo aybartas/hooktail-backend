@@ -29,6 +29,11 @@ namespace Hooktail.Business.Concrete
             await genericRepository.DeleteAsync(entity);
         }
 
+        public async Task<T> FindById(int id)
+        {
+           return  await genericRepository.FindByIdAsync(id);
+        }
+
         public async Task<List<T>> GetAllAsync()
         {
             return await genericRepository.GetAllAsync();

@@ -15,6 +15,6 @@ namespace Hooktail.DataAccess.Interfaces
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task DeleteAsync(T entity);
-
+        Task<T> FindByIdAsync(int id);
     } 
 }
