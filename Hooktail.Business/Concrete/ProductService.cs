@@ -19,6 +19,5 @@ namespace Hooktail.Business.Concrete
             this.genericRepository = genericRepository;
         }
 
-
     }
 }
