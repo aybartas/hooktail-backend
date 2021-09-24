@@ -1,6 +1,7 @@
 ﻿using Hooktail.Business.Interfaces;
 using Hooktail.DataAccess.Interfaces;
 using Hooktail.Entities.Concrete;
+using Hooktail.Entities.DTOs.UserDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,16 @@ namespace Hooktail.Business.Concrete
         public UserService(IGenericRepository<User> genericRepository) : base(genericRepository)
         {
             this.genericRepository = genericRepository;
+        }
+
+        public async Task<User> ValidateUserCredentials(UserLoginDto userLoginDto)
+        {
+            var user = await genericRepository.GetAsync(
+                I => I.Username == userLoginDto.Username &&
+                I.Password == userLoginDto.Password
+                );
+
+            return user.FirstOrDefault();
         }
     }
 }

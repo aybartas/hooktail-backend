@@ -11,6 +11,6 @@ namespace Hooktail.Business.StaticInfo.Jwt
         public const string Issuer = "https://localhost:44396";
         public const string Audience = "https://localhost:44396"; // CHANGE AFTER CLIENT
         public const string SecurityKey = "thisismysecretkey";
-
+        public const double Expires = 40;
     }
 }

@@ -2,6 +2,7 @@
 using Hooktail.Business.Interfaces;
 using Hooktail.Entities.Concrete;
 using Hooktail.Entities.DTOs.ProductDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -38,6 +39,7 @@ namespace Hooktail.WebAPI.Controllers
             return Ok(mapper.Map<ProductListDto>(product));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(ProductAddDto productAddDto)
         {
@@ -45,6 +47,7 @@ namespace Hooktail.WebAPI.Controllers
             return Created("", productAddDto);
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(int id, ProductUpdateDto productUpdateDto)
         {
@@ -55,6 +58,7 @@ namespace Hooktail.WebAPI.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
