@@ -1,6 +1,8 @@
-﻿using Hooktail.Business.Interfaces;
+﻿using AutoMapper;
+using Hooktail.Business.Interfaces;
 using Hooktail.Business.Utility.Jwt;
 using Hooktail.Entities.DTOs.UserDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,12 +16,15 @@ namespace Hooktail.WebAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        IUserService userService;
-        IJwtService jwtService;
-        public AuthController(IUserService userService, IJwtService jwtService)
+        readonly IUserService userService;
+        readonly IJwtService jwtService;
+        readonly IMapper mapper;
+
+        public AuthController(IUserService userService, IJwtService jwtService, IMapper mapper)
         {
             this.userService = userService;
             this.jwtService = jwtService;
+            this.mapper = mapper;
         }
 
         [HttpPost]
@@ -33,6 +38,18 @@ namespace Hooktail.WebAPI.Controllers
                 return Created("", token);
             }
             return BadRequest("Wrong signin credentials");
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<IActionResult> ActiveUser()
+        {
+            var user = await userService.GetUserByUsername(User.Identity.Name);
+            if(user != null)
+            {
+                return Ok(mapper.Map<ActiveUserDto>(user));
+            }
+            return BadRequest(User.Identity.Name);
         }
     }
 }

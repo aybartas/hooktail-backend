@@ -20,6 +20,13 @@ namespace Hooktail.Business.Concrete
             this.genericRepository = genericRepository;
         }
 
+        public async Task<User> GetUserByUsername(string username)
+        {
+            var user = await genericRepository.GetAsync(I => I.Username == username);
+            return user.FirstOrDefault();
+        }
+
+       
         public async Task<User> ValidateUserCredentials(UserLoginDto userLoginDto)
         {
             var user = await genericRepository.GetAsync(

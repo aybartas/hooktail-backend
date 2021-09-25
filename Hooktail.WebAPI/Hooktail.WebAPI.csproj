@@ -14,8 +14,4 @@
     <ProjectReference Include="..\Hooktail.Business\Hooktail.Business.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

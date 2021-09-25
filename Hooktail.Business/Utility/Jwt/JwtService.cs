@@ -16,7 +16,7 @@ namespace Hooktail.Business.Utility.Jwt
             var key = Encoding.UTF8.GetBytes(JwtInfo.SecurityKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("Name", user.Username.ToString()) }),
                 Expires = DateTime.UtcNow.AddDays(JwtInfo.Expires),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
