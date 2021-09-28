@@ -26,6 +26,8 @@ namespace Hooktail.DataAccess.Context
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -46,6 +48,8 @@ namespace Hooktail.DataAccess.Context
             modelBuilder.ApplyConfiguration(new StockMap());
             modelBuilder.ApplyConfiguration(new SubCategoryMap());
             modelBuilder.ApplyConfiguration(new UserMap());
+            modelBuilder.ApplyConfiguration(new RoleMap());
+            modelBuilder.ApplyConfiguration(new UserRoleMap());
 
         }
 

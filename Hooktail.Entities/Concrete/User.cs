@@ -19,6 +19,6 @@ namespace Hooktail.Entities.Concrete
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<PaymentInfo> PaymentInfos { get; set; }
-
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

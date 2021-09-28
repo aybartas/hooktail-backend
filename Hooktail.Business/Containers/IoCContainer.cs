@@ -25,8 +25,6 @@ namespace Hooktail.Business.Containers
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductRepository, ProductRepository>();
 
-
-
             services.AddScoped<IJwtService, JwtService>();
         }
     }

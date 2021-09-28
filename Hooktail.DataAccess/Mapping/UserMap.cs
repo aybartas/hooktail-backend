@@ -20,6 +20,10 @@ namespace Hooktail.DataAccess.Mapping
             builder.HasMany(I => I.Comments).WithOne(I => I.User).HasForeignKey(I => I.UserId);
             builder.HasMany(I => I.Orders).WithOne(I => I.User).HasForeignKey(I => I.UserId);
             builder.HasMany(I => I.PaymentInfos).WithOne(I => I.User).HasForeignKey(I => I.UserId);
+            builder.HasIndex(I => I.Username).IsUnique();  // to make username unique
+            builder.HasMany(I => I.UserRoles).WithOne(I => I.User).
+                HasForeignKey(I => I.UserId).OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }
