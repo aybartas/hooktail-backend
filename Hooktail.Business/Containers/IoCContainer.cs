@@ -4,11 +4,6 @@ using Hooktail.Business.Utility.Jwt;
 using Hooktail.DataAccess.Concrete;
 using Hooktail.DataAccess.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hooktail.Business.Containers
 {
@@ -24,6 +19,13 @@ namespace Hooktail.Business.Containers
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+
+
+            services.AddScoped<IUserRoleService, UserRoleService>();
+            services.AddScoped<IUserRoleRepository,UserRoleRepository>();
 
             services.AddScoped<IJwtService, JwtService>();
         }
