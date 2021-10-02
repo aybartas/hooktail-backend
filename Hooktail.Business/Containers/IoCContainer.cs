@@ -1,8 +1,11 @@
-﻿using Hooktail.Business.Concrete;
+﻿using FluentValidation;
+using Hooktail.Business.Concrete;
 using Hooktail.Business.Interfaces;
 using Hooktail.Business.Utility.Jwt;
+using Hooktail.Business.Validation;
 using Hooktail.DataAccess.Concrete;
 using Hooktail.DataAccess.Interfaces;
+using Hooktail.Entities.DTOs.ProductDTOs;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hooktail.Business.Containers
@@ -28,6 +31,9 @@ namespace Hooktail.Business.Containers
             services.AddScoped<IUserRoleRepository,UserRoleRepository>();
 
             services.AddScoped<IJwtService, JwtService>();
+
+            services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
+
         }
     }
 }

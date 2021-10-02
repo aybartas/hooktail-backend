@@ -2,6 +2,7 @@
 using Hooktail.Business.Interfaces;
 using Hooktail.Entities.Concrete;
 using Hooktail.Entities.DTOs.ProductDTOs;
+using Hooktail.WebAPI.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +34,7 @@ namespace Hooktail.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(ValidateId<Product>))]
         public async Task<IActionResult> GetById(int id)
         {
             var product = await productService.GetAsync(I => I.Id == id);
@@ -40,6 +42,7 @@ namespace Hooktail.WebAPI.Controllers
         }
 
         [Authorize]
+        [ValidateModel]
         [HttpPost]
         public async Task<IActionResult> Create(ProductAddDto productAddDto)
         {

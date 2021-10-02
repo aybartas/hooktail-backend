@@ -1,5 +1,7 @@
+using FluentValidation.AspNetCore;
 using Hooktail.Business.Containers;
 using Hooktail.Business.StaticInfo.Jwt;
+using Hooktail.WebAPI.ActionFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +34,7 @@ namespace Hooktail.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer( options => {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -53,6 +55,8 @@ namespace Hooktail.WebAPI
             });
 
             services.AddDependencies();
+            services.AddScoped(typeof(ValidateId<>));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
