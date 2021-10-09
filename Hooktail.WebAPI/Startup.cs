@@ -34,8 +34,7 @@ namespace Hooktail.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(Startup));
-            services.AddControllers().AddFluentValidation();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer( options => {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ClockSkew = TimeSpan.Zero,
@@ -43,11 +42,11 @@ namespace Hooktail.WebAPI
                     ValidateIssuerSigningKey = true,
                     ValidateAudience = true,
                     ValidIssuer = JwtInfo.Issuer,
-                    ValidAudience = JwtInfo.Audience, 
+                    ValidAudience = JwtInfo.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtInfo.SecurityKey))
                 };
             });
-
+            services.AddControllers().AddFluentValidation();
 
             services.AddSwaggerGen(c =>
             {

@@ -9,6 +9,6 @@ namespace Hooktail.Business.Utility.Jwt
 {
     public interface IJwtService
     {
-        string GenerateJwt(User user);
+        string GenerateJwt(User user, List<Role> userRoles);
     }
 }

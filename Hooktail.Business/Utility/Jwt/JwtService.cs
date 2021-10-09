@@ -2,6 +2,7 @@
 using Hooktail.Entities.Concrete;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -10,19 +11,40 @@ namespace Hooktail.Business.Utility.Jwt
 {
     public class JwtService : IJwtService
     {
-        public string GenerateJwt(User user)
+        public string GenerateJwt(User user,List<Role> userRoles)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(JwtInfo.SecurityKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()), new Claim("Name", user.Username.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(JwtInfo.Expires),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtInfo.SecurityKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            return tokenHandler.WriteToken(token);
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var jwtSecurityToken = new JwtSecurityToken(
+                issuer:JwtInfo.Issuer,
+                audience:JwtInfo.Audience,
+                notBefore:DateTime.Now,
+                expires:DateTime.Now.AddDays(JwtInfo.Expires),
+                claims: GetClaims(user,userRoles),
+                signingCredentials: credentials
+                );
+
+            return tokenHandler.WriteToken(jwtSecurityToken);
+        }
+        private List<Claim> GetClaims(User user, List<Role> userRoles)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+            };
+
+            if (userRoles.Count > 0)
+            {            
+                foreach(var role in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role,role.Name));
+                }
+            }
+            return claims;
         }
     }
 }
