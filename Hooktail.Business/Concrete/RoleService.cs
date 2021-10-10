@@ -1,6 +1,7 @@
 ﻿using Hooktail.Business.Interfaces;
 using Hooktail.DataAccess.Interfaces;
 using Hooktail.Entities.Concrete;
+using System.Threading.Tasks;
 
 namespace Hooktail.Business.Concrete
 {
@@ -13,5 +14,10 @@ namespace Hooktail.Business.Concrete
             this.genericRepository = genericRepository;
         }
 
+        public async Task<string> GetRoleById(int id)
+        {
+            var role = await genericRepository.FindByIdAsync(id);
+            return role.Name ?? string.Empty;
+        }
     }
 }

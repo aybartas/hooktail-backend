@@ -3,9 +3,11 @@ using Hooktail.Business.Concrete;
 using Hooktail.Business.Interfaces;
 using Hooktail.Business.Utility.Jwt;
 using Hooktail.Business.Validation;
+using Hooktail.Business.Validators;
 using Hooktail.DataAccess.Concrete;
 using Hooktail.DataAccess.Interfaces;
 using Hooktail.Entities.DTOs.ProductDTOs;
+using Hooktail.Entities.DTOs.UserDTOs;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hooktail.Business.Containers
@@ -33,6 +35,7 @@ namespace Hooktail.Business.Containers
             services.AddScoped<IJwtService, JwtService>();
 
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();
+            services.AddTransient<IValidator<UserLoginDto>, UserLoginDtoValidator>();
 
         }
     }

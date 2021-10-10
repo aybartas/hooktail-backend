@@ -17,13 +17,15 @@ namespace Hooktail.WebAPI.Controllers
     public class AuthController : ControllerBase
     {
         readonly IUserService userService;
+        readonly IUserRoleService userRoleService;
         readonly IJwtService jwtService;
         readonly IMapper mapper;
 
-        public AuthController(IUserService userService, IJwtService jwtService, IMapper mapper)
+        public AuthController(IUserService userService, IJwtService jwtService, IUserRoleService userRoleService, IMapper mapper)
         {
             this.userService = userService;
             this.jwtService = jwtService;
+            this.userRoleService = userRoleService;
             this.mapper = mapper;
         }
 
@@ -31,10 +33,11 @@ namespace Hooktail.WebAPI.Controllers
         public async Task<IActionResult>  SignIn(UserLoginDto userLoginDto)
         {
             var user = await userService.ValidateUserCredentials(userLoginDto);
-
+        
             if(user != null)
             {
-                var token = jwtService.GenerateJwt(user);
+                var userRoles =  await userRoleService.GetUserRolesByUsername(user.Username);
+                var token = jwtService.GenerateJwt(user, userRoles);
                 return Created("", token);
             }
             return BadRequest("Wrong signin credentials");

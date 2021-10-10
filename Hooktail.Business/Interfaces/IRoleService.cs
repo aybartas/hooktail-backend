@@ -9,5 +9,6 @@ namespace Hooktail.Business.Interfaces
 {
     public interface IRoleService: IGenericService<Role>
     {
+         string GetRoleById(int id);
     }
 }

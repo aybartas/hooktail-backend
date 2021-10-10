@@ -9,5 +9,6 @@ namespace Hooktail.Business.Interfaces
 {
     public interface IUserRoleService: IGenericService<UserRole>
     {
+        public Task<List<Role>> GetUserRolesByUsername(string username);
     }
 }
