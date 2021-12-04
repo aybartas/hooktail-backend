@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hooktail.Business.Interfaces;
+using Hooktail.Business.StaticInfo.Roles;
 using Hooktail.Business.Utility.Jwt;
 using Hooktail.Entities.Concrete;
 using Hooktail.Entities.DTOs.UserDTOs;
@@ -47,7 +48,7 @@ namespace Hooktail.WebAPI.Controllers
 
         [HttpPost]
         [ValidateModel]
-        public async Task<IActionResult> SignUp(CreateUserDto createUserDto)
+        public async Task<IActionResult> SignUp(CreateUserDto createUserDto, [FromServices] IRoleService roleService)
         {
             var user =  await userService.GetUserByUsername(createUserDto.Username);
             
@@ -56,10 +57,13 @@ namespace Hooktail.WebAPI.Controllers
                 return BadRequest($"{createUserDto.Username} is taken please login.");
             }
 
-            await userService.AddAsync(mapper.Map<User>(createUserDto));
+            var recordedUser = await userService.GetUserByUsername(user.Username);
+            var role = roleService.GetRoleByName(RoleInfo.User);
+            var userRole = new UserRole { UserId = recordedUser.Id, RoleId = role.Id };
 
+            await userService.AddAsync(mapper.Map<User>(createUserDto));
+            await userRoleService.AddAsync(userRole);
             return Created("", createUserDto);
-        
         }
 
         [HttpGet("[action]")]

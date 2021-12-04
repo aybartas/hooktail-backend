@@ -10,5 +10,6 @@ namespace Hooktail.Business.Interfaces
     public interface IRoleService: IGenericService<Role>
     {
         Task<string> GetRoleById(int id);
+        Task<Role> GetRoleByName(string name);
     }
 }

@@ -1,5 +1,6 @@
 using FluentValidation.AspNetCore;
 using Hooktail.Business.Containers;
+using Hooktail.Business.Interfaces;
 using Hooktail.Business.StaticInfo.Jwt;
 using Hooktail.WebAPI.ActionFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,7 +60,7 @@ namespace Hooktail.WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IUserService userService, IUserRoleService userRoleService, IRoleService roleService)
         {
             if (env.IsDevelopment())
             {
@@ -79,6 +80,8 @@ namespace Hooktail.WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            RoleInitializer.InitializeRoles(userService, userRoleService,roleService).Wait();
         }
     }
 }

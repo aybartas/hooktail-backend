@@ -19,7 +19,13 @@ namespace Hooktail.Business.Concrete
             var role = await genericRepository.FindByIdAsync(id);
             return role.Name ?? string.Empty;
         }
+        public async Task<Role> GetRoleByName(string name)
+        {
+            var role = await genericRepository.GetAsync(I => I.Name.Equals(name));
 
-   
+            return role[0] ?? new Role();
+        }
+
+
     }
 }
