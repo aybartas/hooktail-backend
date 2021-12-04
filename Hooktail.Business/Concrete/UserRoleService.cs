@@ -28,9 +28,12 @@ namespace Hooktail.Business.Concrete
             if(user != null)
             {
                 var userRoles = await genericRepository.GetAsync(I => I.UserId == user.Id);
-                roleList = userRoles.Select(userRole => new Role { Id = userRole.RoleId, Name = roleService.GetRoleById(userRole.RoleId) }).ToList();
-               
-            }
+
+                roleList = (List<Role>)userRoles.Select(async userRole =>{
+                    var roleName = await roleService.GetRoleById(userRole.RoleId);
+                    var role = new Role { Id = userRole.RoleId, Name = roleName };
+                    return role;});
+            } 
             return roleList;
         }
     }

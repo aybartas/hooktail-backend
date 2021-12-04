@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Hooktail.Business.Interfaces;
 using Hooktail.Business.Utility.Jwt;
+using Hooktail.Entities.Concrete;
 using Hooktail.Entities.DTOs.UserDTOs;
+using Hooktail.WebAPI.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +31,8 @@ namespace Hooktail.WebAPI.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult>  SignIn(UserLoginDto userLoginDto)
+        [HttpGet]
+        public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
             var user = await userService.ValidateUserCredentials(userLoginDto);
         
@@ -41,6 +43,23 @@ namespace Hooktail.WebAPI.Controllers
                 return Created("", token);
             }
             return BadRequest("Wrong signin credentials");
+        }
+
+        [HttpPost]
+        [ValidateModel]
+        public async Task<IActionResult> SignUp(CreateUserDto createUserDto)
+        {
+            var user =  await userService.GetUserByUsername(createUserDto.Username);
+            
+            if(user != null)
+            {
+                return BadRequest($"{createUserDto.Username} is taken please login.");
+            }
+
+            await userService.AddAsync(mapper.Map<User>(createUserDto));
+
+            return Created("", createUserDto);
+        
         }
 
         [HttpGet("[action]")]
@@ -54,5 +73,6 @@ namespace Hooktail.WebAPI.Controllers
             }
             return BadRequest(User.Identity.Name);
         }
+
     }
 }

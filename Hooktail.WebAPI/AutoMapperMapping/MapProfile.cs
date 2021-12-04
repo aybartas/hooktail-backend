@@ -37,6 +37,9 @@ namespace Hooktail.WebAPI.AutoMapperMapping
 
             CreateMap<ActiveUserDto, User>();
             CreateMap<User, ActiveUserDto>();
+
+            CreateMap<CreateUserDto, User>();
+            CreateMap<User, CreateUserDto>();
         }
     }
 }
