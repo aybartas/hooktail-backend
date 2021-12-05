@@ -32,7 +32,8 @@ namespace Hooktail.WebAPI.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpPost("[action]")]
+
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
             var user = await userService.ValidateUserCredentials(userLoginDto);
@@ -46,23 +47,25 @@ namespace Hooktail.WebAPI.Controllers
             return BadRequest("Wrong signin credentials");
         }
 
-        [HttpPost]
+        [HttpPost("[action]")]
         [ValidateModel]
         public async Task<IActionResult> SignUp(CreateUserDto createUserDto, [FromServices] IRoleService roleService)
         {
             var user =  await userService.GetUserByUsername(createUserDto.Username);
-            
+             
             if(user != null)
             {
                 return BadRequest($"{createUserDto.Username} is taken please login.");
             }
 
-            var recordedUser = await userService.GetUserByUsername(user.Username);
-            var role = roleService.GetRoleByName(RoleInfo.User);
+            await userService.AddAsync(mapper.Map<User>(createUserDto));
+
+            var recordedUser = await userService.GetUserByUsername(createUserDto.Username);
+            var role = await roleService.GetRoleByName(RoleInfo.User);
             var userRole = new UserRole { UserId = recordedUser.Id, RoleId = role.Id };
 
-            await userService.AddAsync(mapper.Map<User>(createUserDto));
             await userRoleService.AddAsync(userRole);
+
             return Created("", createUserDto);
         }
 

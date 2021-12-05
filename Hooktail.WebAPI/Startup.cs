@@ -81,7 +81,7 @@ namespace Hooktail.WebAPI
                 endpoints.MapControllers();
             });
 
-            RoleInitializer.InitializeRoles(userService, userRoleService,roleService).Wait();
+            //RoleInitializer.InitializeRoles(userService, userRoleService,roleService).Wait();
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Hooktail.Business.Validators
     {
         public UserLoginDtoValidator()
         {
-            RuleFor(I => I.Username).NotEmpty().WithMessage("Username can not be empty");
+            RuleFor(I => I.Username).NotEmpty().WithMessage("Login Username can not be empty");
             RuleFor(I => I.Password).NotEmpty().WithMessage("Password can not be empty");
         }
 

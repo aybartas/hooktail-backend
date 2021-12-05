@@ -22,17 +22,18 @@ namespace Hooktail.Business.Concrete
 
         public async Task<List<Role>> GetUserRolesByUsername(string username)
         {
-            var user = userRepository.GetAsync(I => I.Username == username);
+            var user = await userRepository.GetAsync(I => I.Username == username).ContinueWith(I => I.Result.FirstOrDefault());
             var roleList = new List<Role>();
             List<Role> roles = new List<Role>();
             if(user != null)
             {
                 var userRoles = await genericRepository.GetAsync(I => I.UserId == user.Id);
-
-                roleList = (List<Role>)userRoles.Select(async userRole =>{
-                    var roleName = await roleService.GetRoleById(userRole.RoleId);
-                    var role = new Role { Id = userRole.RoleId, Name = roleName };
-                    return role;});
+                foreach(var userRole in userRoles)
+                {
+                    var role = await roleService.GetAsync(I => I.Id == userRole.RoleId).ContinueWith(I => I.Result.FirstOrDefault());
+                    roleList.Add(role);
+                }
+                            
             } 
             return roleList;
         }

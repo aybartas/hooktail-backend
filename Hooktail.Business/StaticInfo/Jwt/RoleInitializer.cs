@@ -11,23 +11,24 @@ namespace Hooktail.Business.StaticInfo.Jwt
             IUserRoleService userRoleService,
             IRoleService roleService)
         {
-            var adminRole = roleService.GetAsync(I => I.Name == Roles.RoleInfo.Admin);
-            var userRole = roleService.GetAsync(I => I.Name == Roles.RoleInfo.User);
+            var adminRole = await roleService.GetAsync(I => I.Name == Roles.RoleInfo.Admin);
+            var userRole = await roleService.GetAsync(I => I.Name == Roles.RoleInfo.User);
 
-            if (adminRole == null)
+            if (adminRole.Count == 0)
             {
-                var role = new Role { Id = 1, Name = Roles.RoleInfo.Admin };
+                var role = new Role {  Name = Roles.RoleInfo.Admin };
                 await roleService.AddAsync(role);
             }
-            if (userRole == null)
+            if (userRole.Count == 0)
             {
-                var role = new Role { Id = 2, Name = Roles.RoleInfo.User };
+                var role = new Role { Name = Roles.RoleInfo.User };
                 await roleService.AddAsync(role);
             }
 
             await userService.AddAsync(new User { Username = "admin", Password = "12345" });
-            var user = userService.GetUserByUsername("admin");
-            await userRoleService.AddAsync(new UserRole { RoleId = 1, UserId = user.Id });
+            var user = await userService.GetUserByUsername("admin");
+
+            await userRoleService.AddAsync(new UserRole { RoleId = adminRole[0].Id, UserId = user.Id });
 
         }
     }
