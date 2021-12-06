@@ -33,7 +33,6 @@ namespace Hooktail.WebAPI.Controllers
         }
 
         [HttpPost("[action]")]
-
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
             var user = await userService.ValidateUserCredentials(userLoginDto);
@@ -70,7 +69,7 @@ namespace Hooktail.WebAPI.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize]
+        [Authorize] // if it passess authorize it implies user is logged in.
         public async Task<IActionResult> ActiveUser()
         {
             var user = await userService.GetUserByUsername(User.Identity.Name);
@@ -80,6 +79,5 @@ namespace Hooktail.WebAPI.Controllers
             }
             return BadRequest(User.Identity.Name);
         }
-
     }
 }
