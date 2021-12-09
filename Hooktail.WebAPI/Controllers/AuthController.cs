@@ -41,10 +41,26 @@ namespace Hooktail.WebAPI.Controllers
             {
                 var userRoles =  await userRoleService.GetUserRolesByUsername(user.Username);
                 var token = jwtService.GenerateJwt(user, userRoles);
-                return Created("", token);
+
+                Response.Cookies.Append("jwt", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.None,
+                    Secure = true
+                });
+
+                return Ok("Sign In Successfull");
             }
             return BadRequest("Wrong signin credentials");
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SignOut()
+        {
+            Response.Cookies.Delete("jwt");
+            return Ok("Sign Out Successfull");
+        }
+
 
         [HttpPost("[action]")]
         [ValidateModel]
@@ -79,5 +95,7 @@ namespace Hooktail.WebAPI.Controllers
             }
             return BadRequest(User.Identity.Name);
         }
+
+
     }
 }

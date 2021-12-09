@@ -34,6 +34,7 @@ namespace Hooktail.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -72,6 +73,13 @@ namespace Hooktail.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(options => options
+            //.WithOrigins(new string[] { "http://localhost:3000" }) // the origins that can access endpoints not necessary for now
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials() // to allow send cookies from frontend
+            );
 
             app.UseAuthentication();
             app.UseAuthorization();
