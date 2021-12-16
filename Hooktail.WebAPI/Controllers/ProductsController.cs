@@ -28,7 +28,6 @@ namespace Hooktail.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = RoleInfo.User + "," + RoleInfo.Admin)]
         public async Task<IActionResult> GetAll()
         {
             var productEntities = await productService.GetAllAsync();
@@ -37,8 +36,8 @@ namespace Hooktail.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [ServiceFilter(typeof(ValidateId<Product>))]
         [Authorize(Roles = RoleInfo.Admin)]
+        [ServiceFilter(typeof(ValidateId<Product>))]
         public async Task<IActionResult> GetById(int id)
         {
             var product = await productService.GetAsync(I => I.Id == id);

@@ -4,14 +4,16 @@ using Hooktail.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Hooktail.DataAccess.Migrations
 {
     [DbContext(typeof(HooktailContext))]
-    partial class HooktailContextModelSnapshot : ModelSnapshot
+    [Migration("20211216174651_eager loading of products added")]
+    partial class eagerloadingofproductsadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

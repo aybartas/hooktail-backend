@@ -1,11 +1,6 @@
 ﻿using Hooktail.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hooktail.DataAccess.Mapping
 {
@@ -22,6 +17,7 @@ namespace Hooktail.DataAccess.Mapping
             builder.HasMany(I => I.ProductCampaigns).WithOne(I => I.Product).HasForeignKey(I => I.ProductId);
             builder.HasMany(I => I.OrderItems).WithOne(I => I.Product).HasForeignKey(I => I.ProductId);
             builder.HasMany(I => I.Comments).WithOne(I => I.Product).HasForeignKey(I => I.ProductId);
+            builder.Navigation(x => x.SubCategory).AutoInclude();
 
         }
     }

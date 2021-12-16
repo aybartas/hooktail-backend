@@ -31,6 +31,9 @@ namespace Hooktail.Business.Containers
             services.AddScoped<IUserRoleService, UserRoleService>();
             services.AddScoped<IUserRoleRepository,UserRoleRepository>();
 
+            services.AddScoped<ISubCategoryService, SubCategoryService>();
+            services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
+
             services.AddScoped<IJwtService, JwtService>();
 
             services.AddTransient<IValidator<ProductAddDto>, ProductAddDtoValidator>();

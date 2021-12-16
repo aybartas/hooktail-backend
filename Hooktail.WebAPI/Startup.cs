@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,10 @@ namespace Hooktail.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            services.AddCors(options =>
+                 options.AddDefaultPolicy(builder =>
+                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -48,7 +52,9 @@ namespace Hooktail.WebAPI
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtInfo.SecurityKey))
                 };
             });
-            services.AddControllers().AddFluentValidation();
+            services.AddControllers().AddNewtonsoftJson(options => {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            }).AddFluentValidation();
 
             services.AddSwaggerGen(c =>
             {
@@ -57,7 +63,7 @@ namespace Hooktail.WebAPI
 
             services.AddDependencies();
             services.AddScoped(typeof(ValidateId<>));
-
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,13 +79,13 @@ namespace Hooktail.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors(options => options
+            app.UseCors();
+            //app.UseCors(options => options
             //.WithOrigins(new string[] { "http://localhost:3000" }) // the origins that can access endpoints not necessary for now
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials() // to allow send cookies from frontend
-            );
+            //.AllowAnyHeader()
+            //.AllowAnyMethod()
+            //.AllowCredentials() // to allow send cookies from frontend
+            //);
 
             app.UseAuthentication();
             app.UseAuthorization();

@@ -2,6 +2,7 @@
 using Hooktail.Entities.Concrete;
 using Hooktail.Entities.DTOs.CategoryDTOs;
 using Hooktail.Entities.DTOs.ProductDTOs;
+using Hooktail.Entities.DTOs.SubCategoryDTOs;
 using Hooktail.Entities.DTOs.UserDTOs;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,9 @@ namespace Hooktail.WebAPI.AutoMapperMapping
 
             CreateMap<CreateUserDto, User>();
             CreateMap<User, CreateUserDto>();
+
+            CreateMap<SubCategory, SubCategoryListDto>();
+            CreateMap<SubCategoryListDto, SubCategory>();
         }
     }
 }
