@@ -6,6 +6,7 @@ using Hooktail.WebAPI.ActionFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -35,12 +36,11 @@ namespace Hooktail.WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-                 options.AddDefaultPolicy(builder =>
-                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
-
+            
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ClockSkew = TimeSpan.Zero,
@@ -52,6 +52,7 @@ namespace Hooktail.WebAPI
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtInfo.SecurityKey))
                 };
             });
+
             services.AddControllers().AddNewtonsoftJson(options => {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             }).AddFluentValidation();
@@ -75,11 +76,16 @@ namespace Hooktail.WebAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hooktail.WebAPI v1"));
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
             app.UseCors();
+
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
+
             //app.UseCors(options => options
             //.WithOrigins(new string[] { "http://localhost:3000" }) // the origins that can access endpoints not necessary for now
             //.AllowAnyHeader()

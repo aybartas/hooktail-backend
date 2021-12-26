@@ -36,7 +36,7 @@ namespace Hooktail.WebAPI.Controllers
         public async Task<IActionResult> SignIn(UserLoginDto userLoginDto)
         {
             var user = await userService.ValidateUserCredentials(userLoginDto);
-        
+         
             if(user != null)
             {
                 var userRoles =  await userRoleService.GetUserRolesByUsername(user.Username);
@@ -45,11 +45,12 @@ namespace Hooktail.WebAPI.Controllers
                 Response.Cookies.Append("jwt", token, new CookieOptions
                 {
                     HttpOnly = true,
-                    SameSite = SameSiteMode.None,
-                    Secure = true
+                    SameSite = SameSiteMode.Lax,
+                    Secure = false,
+                    IsEssential = true
                 });
 
-                return Ok("Sign In Successfull");
+                return Ok(user);
             }
             return BadRequest("Wrong signin credentials");
         }
